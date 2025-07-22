@@ -1,0 +1,233 @@
+﻿
+@{
+    ViewBag.Title = "Meal Orders";
+}
+
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        color: #007bff;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="tel"],
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .button-row {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .button-row .col {
+        flex: 1;
+    }
+
+    .button-row button {
+        display: block;
+        width: 100%;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .button-row button:hover {
+        background-color: #0056b3;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    table th,
+    table td {
+        padding: 10px;
+        border: 1px solid #ced4da;
+        text-align: left;
+    }
+</style>
+
+<h2>Order a Meal</h2>
+
+<div class="form-group">
+    <label for="firstname">First Name:</label>
+    <input type="text" id="firstName" placeholder="enter your first name" required />
+</div>
+
+<div class="form-group">
+    <label for="surname">Surname:</label>
+    <input type="text" id="surname" placeholder="enter your surname" required />
+</div>
+
+<div class="form-group">
+    <label for="mealType">Meal Type:</label>
+    <select id="mealType" required>
+        <option value="default">-</option>
+        <option value="Regular">Regular</option>
+        <option value="Vegan">Vegan</option>
+        <option value="Halal">Halal</option>
+        <option value="Kosher">Kosher</option>
+        <option value="Indian">Indian</option>
+        <option value="GlutenFree">Gluten-free</option>
+        <option value="Keto">Keto</option>
+        <option value="Paleo">Paleo</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="mealAgent">Meal Agent:</label>
+    <input type="text" id="mealAgent" placeholder="meal agent name" required />
+</div>
+
+<div class="form-group">
+    <label for="mealDetails">Meal Details:</label>
+    <textarea id="mealDetails" placeholder="Describe your meal here"></textarea>
+</div>
+
+<div class="form-group">
+    <label for="hotelResidence">Hotel Residence:</label>
+    <select id="hotelResidence" required>
+        <option value="default">-</option>
+        <option value="Capehoney">CapeHoney</option>
+        <option value="Capeivory">CapeIvory</option>
+        <option value="Capesweet">CapeSweet</option>
+        <option value="Capehive">CapeHive</option>
+        <option value="Capecow">CapeCow</option>
+    </select>
+</div>
+
+<div class="row">
+    <div class="col">
+        <button onclick="orderMeal()">Order Meal</button>
+    </div>
+
+    <div class="col">
+        <button onclick="location.href='@Url.Action("ViewOrder", "Hotel")'">View Order</button>
+    </div>
+</div>
+
+<div class="row">
+    <h3>Meal Providers</h3>
+    <table id="displayTable">
+        <thead>
+            <tr>
+                <th>Name + Surname</th>
+                <th>Email</th>
+                <th>Telephone</th>
+                <th>Meal Services</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function displayMealAgents() {
+        var mealAgents = JSON.parse(localStorage.getItem("mealAgents")) || [];
+
+        var tableBody = document.getElementById("displayTable").getElementsByTagName("tbody")[0];
+
+        tableBody.innerHTML = ""; // Clear existing table rows
+
+        mealAgents.forEach(function (agent) {
+            var row = tableBody.insertRow();
+            var nameCell = row.insertCell(0);
+            var emailCell = row.insertCell(1);
+            var telephoneCell = row.insertCell(2);
+            var mealServicesCell = row.insertCell(3);
+            nameCell.innerText = agent.name;
+            emailCell.innerText = agent.email;
+            telephoneCell.innerText = agent.telephone;
+            mealServicesCell.innerText = agent.mealServices.join(", ");
+        });
+    }
+
+    // Call displayMealAgents on page load to populate the table
+    window.onload = function () {
+        displayMealAgents();
+    };
+
+    function orderMeal() {
+        // Get input values
+        var firstName = document.getElementById("firstName").value.trim();
+        var surname = document.getElementById("surname").value.trim();
+        var mealType = document.getElementById("mealType").value;
+        var mealAgent = document.getElementById("mealAgent").value.trim();
+        var mealDetails = document.getElementById("mealDetails").value.trim();
+        var hotelResidence = document.getElementById("hotelResidence").value;
+
+        // Validate input fields
+        if (!firstName || !surname || !mealType || !mealAgent || !mealDetails || hotelResidence === "default") {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        // Retrieve meal agents from local storage
+        var mealAgents = JSON.parse(localStorage.getItem("mealAgents")) || [];
+
+        // Check if the provided name and surname match one of the meal agents
+        var agentFound = false;
+        for (var i = 0; i < mealAgents.length; i++) {
+            var agentName = mealAgents[i].name;
+            if (agentName === (mealAgent)) {
+                agentFound = true;
+                break;
+            }
+        }
+
+        if (!agentFound) {
+            alert("Invalid name and surname combination. Please select a valid meal agent.");
+            return;
+        }
+
+        // Save order details to local storage
+        var order = {
+            firstName: firstName,
+            surname: surname,
+            mealType: mealType,
+            mealAgent: mealAgent,
+            mealDetails: mealDetails,
+            hotelResidence: hotelResidence
+        };
+
+        localStorage.setItem("order", JSON.stringify(order));
+        console.log(localStorage.getItem("order"));
+
+        alert("Order placed successfully!");
+    }
+</script>

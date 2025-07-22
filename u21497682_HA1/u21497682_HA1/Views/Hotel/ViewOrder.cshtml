@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewBag.Title = "ViewOrder";
+}
+
+<style>
+    .order-details {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        color: #007bff;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    p {
+        margin: 0;
+    }
+</style>
+
+<h2>Your Order</h2>
+
+<div>
+    <label>First Name:</label>
+    <p id="firstName"></p>
+</div>
+
+<div>
+    <label>Surname:</label>
+    <p id="surname"></p>
+</div>
+
+<div>
+    <label>Meal Type:</label>
+    <p id="mealType"></p>
+</div>
+
+<div>
+    <label>Meal Agent:</label>
+    <p id="mealAgent"></p>
+</div>
+
+<div>
+    <label>Meal Details:</label>
+    <p id="mealDetails"></p>
+</div>
+
+<div>
+    <label>Hotel Residence:</label>
+    <p id="hotelResidence"></p>
+</div>
+
+<script>
+    // Function to display order information from local storage
+    function displayOrderInfo() {
+        // Retrieve the order from local storage
+        var order = JSON.parse(localStorage.getItem("order"));
+
+        // Check if there is an order available
+        if (!order) {
+            alert("No order found.");
+            return;
+        }
+
+        // Display order information
+        document.getElementById("firstName").textContent = order.firstName;
+        document.getElementById("surname").textContent = order.surname;
+        document.getElementById("mealType").textContent = order.mealType;
+        document.getElementById("mealAgent").textContent = order.mealAgent;
+        document.getElementById("mealDetails").textContent = order.mealDetails;
+        document.getElementById("hotelResidence").textContent = order.hotelResidence;
+    }
+
+    // Call displayOrderInfo on page load to populate the order information
+    window.onload = function () {
+        displayOrderInfo();
+    };
+</script>

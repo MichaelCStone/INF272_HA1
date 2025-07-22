@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Meals";
+}
+
+<style>
+    /* Container for buttons */
+    div {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    /* Buttons */
+    button {
+        margin: 0 10px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+<h2>Meals</h2>
+
+<div>
+    <button onclick="location.href='@Url.Action("MealAgents", "Hotel")'">Meal Agents</button>
+
+    <button onclick="location.href='@Url.Action("MealOrders", "Hotel")'">Meal Orders</button>
+</div>

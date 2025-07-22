@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "Booking Confirmed";
+}
+
+<style>
+    /* Container for booking details */
+    #bookingDetails {
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    }
+
+        /* Heading */
+        #bookingDetails h1 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        /* Subheading */
+        #bookingDetails h6 {
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        /* List items */
+        #bookingDetails ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            #bookingDetails ul li {
+                margin-bottom: 5px;
+            }
+</style>
+
+<div class="row">
+    <div class="col" id="bookingDetails">
+
+    </div>
+
+    <div class="col">
+        <img src="@Url.Content("~/Images_&_Videos/Capetropolis.png")" class="img-fluid" alt="Capetropolis">
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function ()
+    {
+        var bookingDetails = JSON.parse(localStorage.getItem('bookingDetails'));
+
+        if (bookingDetails != null)
+        {
+            var container = document.getElementById('bookingDetails');
+
+            container.innerHTML = "<h1>Booking Confirmed for :\n" + bookingDetails.firstName + " " + bookingDetails.surname + "</h1>" + 
+                "<h6>Booking Reference: " + bookingDetails.bookingId + "</h6>" + 
+                "<p>(" + bookingDetails.bookingDateTime + ")</p><br />" + 
+                    "<ul>" +
+                        "<li>Email: " + bookingDetails.email + "</li>" +
+                        "<li>Telephone: " + bookingDetails.telephone + "</li>" +
+                        "<li>Room: " + bookingDetails.roomType + "</li>" +
+                        "<li>Price: R" + bookingDetails.price + "</li>" +
+                    "</ul>" +
+                "</p>";
+        }
+        else
+        {
+            alert('No booking details found.');
+        }
+    });
+</script>

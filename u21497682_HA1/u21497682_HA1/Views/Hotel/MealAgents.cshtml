@@ -1,0 +1,440 @@
+﻿
+@{
+    ViewBag.Title = "Meal Agents";
+}
+
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        color: #007bff;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="tel"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    #mealServices {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #mealServices .col {
+        flex: 1;
+    }
+
+    #mealServices label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .button-row {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .button-row .col {
+        flex: 1;
+    }
+
+    .button-row button {
+        display: block;
+        width: 100%;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .button-row button:hover {
+        background-color: #0056b3;
+    }
+
+    #searchInput {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        box-sizing: border-box;
+        margin-top: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    table th,
+    table td {
+        padding: 10px;
+        border: 1px solid #ced4da;
+        text-align: left;
+    }
+
+    .highlight {
+        background-color: yellow;
+    }
+</style>
+
+<h2>Meal Agents - Caterers</h2>
+
+<div class="form-group">
+    <label for="firstname">First Name:</label>
+    <input type="text" id="firstName" placeholder="enter your first name" required />
+</div>
+
+<div class="form-group">
+    <label for="surname">Surname:</label>
+    <input type="text" id="surname" placeholder="enter your surname" required />
+</div>
+
+<div class="form-group">
+    <label for="email">Email Address:</label>
+    <input type="email" id="email" placeholder="enter your email" required />
+</div>
+
+<div class="form-group">
+    <label for="telephone">Telephone:</label>
+    <input type="tel" id="telephone" placeholder="enter your telephone" required />
+</div>
+
+<div class="form-group">
+    <label for="mealServices">Meal Services:</label>
+    <div id="mealServices">
+        <div class="col">
+            <label for="regular">Regular</label>
+            <input type="checkbox" id="regular" value="regular" />
+
+            <label for="vegan">Vegan</label>
+            <input type="checkbox" id="vegan" value="vegan" />
+
+            <label for="indian">Indian</label>
+            <input type="checkbox" id="indian" value="indian" />
+
+            <label for="halal">Halal</label>
+            <input type="checkbox" id="halal" value="halal" />
+        </div>
+        <div class="col">
+            <label for="kosher">Kosher</label>
+            <input type="checkbox" id="kosher" value="kosher" />
+
+            <label for="keto">Keto</label>
+            <input type="checkbox" id="keto" value="keto" />
+
+            <label for="paleo">Paleo</label>
+            <input type="checkbox" id="paleo" value="paleo" />
+
+            <label for="glutenFree">Gluten-Free</label>
+            <input type="checkbox" id="glutenFree" value="glutenFree" />
+        </div>
+    </div>
+    
+</div>
+
+<div class="row">
+    <div class="col">
+        <button onclick="addMealAgent()">Add</button>
+    </div>
+
+    <div class="col">
+        <button onclick="findMealAgent()">Find</button>
+    </div>
+
+    <div class="col">
+        <button onclick="updateMealAgent()">Update</button>
+    </div>
+
+    <div class="col">
+        <button onclick="deleteMealAgent()">Delete</button>
+    </div>
+</div>
+
+<div class="row">
+    <input id="searchInput" type="search" placeholder="Search" oninput="searchMealAgent()" />
+</div>
+
+<div class="row">
+    <table id="displayTable">
+        <thead>
+            <tr>
+                <th>Name + Surname</th>
+                <th>Email</th>
+                <th>Telephone</th>
+                <th>Meal Services</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+
+<script>
+    window.onload = function () {
+        updateLocalStorage();
+    };
+
+    function addMealAgent() {
+        var firstName = document.getElementById("firstName").value;
+        var surname = document.getElementById("surname").value;
+        var email = document.getElementById("email").value;
+        var telephone = document.getElementById("telephone").value;
+
+        if (firstName == "" || surname == "" || email == "" || telephone == "") {
+            alert("All fields must be entered");
+            return;
+        }
+
+        var mealServices = [];
+        var checkboxes = document.querySelectorAll("#mealServices input[type=checkbox]");
+        checkboxes.forEach(function (checkbox)
+        {
+            if (checkbox.checked)
+            {
+                mealServices.push(checkbox.value);
+            }
+        });
+
+        var table = document.getElementById("displayTable").getElementsByTagName("tbody")[0];
+        var newRow = table.insertRow();
+
+        var nameCell = newRow.insertCell(0);
+        var emailCell = newRow.insertCell(1);
+        var telephoneCell = newRow.insertCell(2);
+        var mealServicesCell = newRow.insertCell(3);
+        var editCell = newRow.insertCell(4);
+
+        nameCell.innerHTML = firstName + " " + surname;
+        emailCell.innerHTML = email;
+        telephoneCell.innerHTML = telephone;
+        mealServicesCell.innerHTML = mealServices.join(", ");
+        editCell.innerHTML = editCell.innerHTML = '<button onclick="editMealAgent(this)">Edit</button>';
+
+        document.getElementById("firstName").value = "";
+        document.getElementById("surname").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("telephone").value = "";
+        checkboxes.forEach(function (checkbox)
+        {
+            checkbox.checked = false;
+        });
+
+        updateLocalStorage();
+    }
+
+    function deleteMealAgent() {
+        var firstName = document.getElementById("firstName").value.trim();
+        var surname = document.getElementById("surname").value.trim();
+
+        if (!firstName) {
+            alert("First name is required.");
+            return;
+        }
+        if (!surname) {
+            alert("Surname is required.");
+            return;
+        }
+
+        var table = document.getElementById("displayTable").getElementsByTagName("tbody")[0];
+        var rows = table.getElementsByTagName("tr");
+        var agentFound = false;
+
+        for (var i = 0; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName("td");
+            var name = cells[0].innerText.split(" ");
+            var rowFirstName = name[0];
+            var rowSurname = name[1];
+
+            if (rowFirstName === firstName && rowSurname === surname) {
+                table.deleteRow(i);
+                agentFound = true;
+                break;
+            }
+        }
+
+        if (!agentFound) {
+            alert("No such agent exists.");
+        }
+
+        updateLocalStorage();
+    }
+
+    function searchMealAgent() {
+        var searchInput = document.getElementById("searchInput").value.trim().toLowerCase();
+
+        var table = document.getElementById("displayTable").getElementsByTagName("tbody")[0];
+        var rows = table.getElementsByTagName("tr");
+
+        for (var i = 0; i < rows.length; i++) {
+            rows[i].classList.remove("highlight");
+        }
+
+        var agentFound = false;
+        for (var i = 0; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName("td");
+            var name = cells[0].innerText.toLowerCase();
+
+            if (name.includes(searchInput)) {
+                rows[i].style.display = "";
+            }
+            else {
+                rows[i].style.display = "none";
+            }
+        }
+    }
+
+    function findMealAgent() {
+        var firstName = document.getElementById("firstName").value.trim();
+        var surname = document.getElementById("surname").value.trim();
+
+        if (!firstName) {
+            alert("First name is required.");
+            return;
+        }
+        if (!surname) {
+            alert("Surname is required.");
+            return;
+        }
+
+        var table = document.getElementById("displayTable").getElementsByTagName("tbody")[0];
+        var rows = table.getElementsByTagName("tr");
+        var agentFound = false;
+
+        for (var i = 0; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName("td");
+            var name = cells[0].innerText.split(" ");
+            var rowFirstName = name[0];
+            var rowSurname = name[1];
+
+            if (rowFirstName === firstName && rowSurname === surname) {
+                var email = cells[1].innerText;
+                var telephone = cells[2].innerText;
+                var mealServices = cells[3].innerText;
+                alert("Agent Details:\nName: " + firstName + " " + surname + "\nEmail: " + email + "\nTelephone: " + telephone + "\nMeal Services: " + mealServices);
+                agentFound = true;
+            }
+        }
+
+        if (!agentFound) {
+            alert("No such agent exists.");
+        }
+    }
+
+    var editedRow = null;
+
+    function editMealAgent(button) {
+        var row = button.parentNode.parentNode;
+        var cells = row.getElementsByTagName("td");
+        var name = cells[0].innerText.split(" ");
+        var email = cells[1].innerText;
+        var telephone = cells[2].innerText;
+        var mealServices = cells[3].innerText;
+
+        document.getElementById("firstName").value = name[0];
+        document.getElementById("surname").value = name[1];
+        document.getElementById("email").value = email;
+        document.getElementById("telephone").value = telephone;
+
+        var mealServicesArray = mealServices.split(", ");
+        var checkboxes = document.querySelectorAll("#mealServices input[type=checkbox]");
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = mealServicesArray.includes(checkbox.value);
+        });
+
+        editedRow = row;
+    }
+
+    function updateMealAgent() {
+        if (!editedRow) {
+            alert("No row is being edited.");
+            return;
+        }
+
+        var firstName = document.getElementById("firstName").value.trim();
+        var surname = document.getElementById("surname").value.trim();
+
+        if (!firstName || !surname) {
+            alert("First name and Surname are required.");
+            return;
+        }
+
+        var mealServices = [];
+        var checkboxes = document.querySelectorAll("#mealServices input[type=checkbox]");
+        checkboxes.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                mealServices.push(checkbox.value);
+            }
+        });
+
+        var cells = editedRow.getElementsByTagName("td");
+        cells[0].innerText = firstName + " " + surname;
+        cells[1].innerText = document.getElementById("email").value;
+        cells[2].innerText = document.getElementById("telephone").value;
+        cells[3].innerText = mealServices.join(", ");
+
+        editedRow = null;
+
+        document.getElementById("firstName").value = "";
+        document.getElementById("surname").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("telephone").value = "";
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = false;
+        });
+
+        updateLocalStorage();
+    }
+
+    function updateLocalStorage() {
+        var mealAgents = [];
+        var table = document.getElementById("displayTable").getElementsByTagName("tbody")[0];
+        var rows = table.getElementsByTagName("tr");
+        for (var i = 0; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName("td");
+            var name = cells[0].innerText;
+            var email = cells[1].innerText;
+            var telephone = cells[2].innerText;
+            var mealServices = cells[3].innerText.split(", ");
+            mealAgents.push({
+                name: name,
+                email: email,
+                telephone: telephone,
+                mealServices: mealServices
+            });
+        }
+        localStorage.setItem("mealAgents", JSON.stringify(mealAgents));
+
+        console.log("Local Storage Updated:", localStorage.getItem("mealAgents"));
+    }
+</script>

@@ -1,0 +1,195 @@
+﻿@{
+    ViewBag.Title = "MainPage";
+}
+
+<style>
+.container {
+        margin-top: 2rem;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        color: #333;
+    }
+
+    p {
+        font-size: 1.1rem;
+        color: #666;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    .card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    .card-title {
+        font-size: 1rem;
+        color: #007bff;
+    }
+
+    .card-text {
+        font-size: 0.9rem;
+        color: #333;
+    }
+
+    .img-thumbnail {
+        height: 150px;
+        object-fit: cover;
+    }
+
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+        max-width: 100%;
+        background: #000;
+    }
+
+    .video-container video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    #about-section {
+        margin-top: 3rem;
+    }
+
+    #about-section h3 {
+        font-size: 1.75rem;
+        color: #333;
+    }
+
+    #about-section p {
+        font-size: 1rem;
+        color: #666;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row align-items-center">
+
+        <div class="col-md-6 text-center">
+            <h1>Welcome to Capetropolis</h1>
+            <p>Experience the best hospitality with our exclusive hotels offering luxurious stays and world-class amenities.</p>
+            <button id="getStartedBtn" class="btn btn-primary">Get Started</button>
+        </div>
+
+        <div class="col-md-6">
+            <video width="100%" autoplay loop controls>
+                <source src="@Url.Content("~/Images_&_Videos/CapetropolisMainPage.mp4")" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+
+    <div id="hotelCardsContainer" class="row mt-5 d-none">
+        <div class="row text-center align-items-center">
+            <div class="col-md-2 mb-3">
+                <div class="card">
+                    <img src="@Url.Content("~/Images_&_Videos/CapeHoneyLogo.png")" class="card-img-top img-thumbnail" alt="CapeHoney">
+                    <div class="card-body">
+                        <h6 class="card-title">CapeHoney</h6>
+                        <p class="card-text">Luxurious stays with a touch of sweetness.</p>
+                        @*<a href="@Url.Action("Hotels", "Hotel", new { hotelID = 1 })" class="btn btn-primary btn-sm">Book Now</a>*@
+                        <button class="btn btn-primary btn-sm" onclick="navigateToHotel(1)">Book Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 mb-3">
+                <div class="card">
+                    <img src="@Url.Content("~/Images_&_Videos/CapeIvoryLogo.png")" class="card-img-top img-thumbnail" alt="CapeIvory">
+                    <div class="card-body">
+                        <h6 class="card-title">CapeIvory</h6>
+                        <p class="card-text">Elegance and comfort in every stay.</p>
+                        @*<a href="@Url.Action("Hotels", "Hotel", new { hotelID = 2 })" class="btn btn-primary btn-sm">Book Now</a>*@
+                        <button class="btn btn-primary btn-sm" onclick="navigateToHotel(2)">Book Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 mb-3">
+                <div class="card">
+                    <img src="@Url.Content("~/Images_&_Videos/CapeSweetLogo.png")" class="card-img-top img-thumbnail" alt="CapeSweet">
+                    <div class="card-body">
+                        <h6 class="card-title">CapeSweet</h6>
+                        <p class="card-text">A sweet escape from the ordinary.</p>
+                        @*<a href="@Url.Action("Hotels", "Hotel", new { hotelID = 3 })" class="btn btn-primary btn-sm">Book Now</a>*@
+                        <button class="btn btn-primary btn-sm" onclick="navigateToHotel(3)">Book Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 mb-3">
+                <div class="card">
+                    <img src="@Url.Content("~/Images_&_Videos/CapeHiveLogo.png")" class="card-img-top img-thumbnail" alt="CapeHive">
+                    <div class="card-body">
+                        <h6 class="card-title">CapeHive</h6>
+                        <p class="card-text">Buzzing with exceptional service.</p>
+                        @*<a href="@Url.Action("Hotels", "Hotel", new { hotelID = 4 })" class="btn btn-primary btn-sm">Book Now</a>*@
+                        <button class="btn btn-primary btn-sm" onclick="navigateToHotel(4)">Book Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 mb-3">
+                <div class="card">
+                    <img src="@Url.Content("~/Images_&_Videos/CapeCowLogo.png")" class="card-img-top img-thumbnail" alt="CapeCow">
+                    <div class="card-body">
+                        <h6 class="card-title">CapeCow</h6>
+                        <p class="card-text">Rustic charm meets modern luxury.</p>
+                        @*<a href="@Url.Action("Hotels", "Hotel", new { hotelID = 5 })" class="btn btn-primary btn-sm">Book Now</a>*@
+                        <button class="btn btn-primary btn-sm" onclick="navigateToHotel(5)">Book Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="about-section" class="col-12 mt-5">
+            <div class="row align-items-center">
+                <div class="col-md-8 text-center">
+                    <h3>About Capetropolis</h3>
+                    <p>Capetropolis offers a unique blend of luxury and comfort with our diverse range of hotels. Each hotel is designed to provide an exceptional stay, catering to different tastes and preferences. From the buzzing service at CapeHive to the rustic charm of CapeCow, we ensure that every guest leaves with memorable experiences.</p>
+                </div>
+                <div class="col-md-4">
+                    <img src="@Url.Content("~/Images_&_Videos/Capetropolis.png")" class="img-fluid" alt="Capetropolis">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('getStartedBtn').addEventListener('click', function () {
+            document.getElementById('hotelCardsContainer').classList.remove('d-none');
+        });
+
+        function navigateToHotel(hotelID) {
+            window.location.href = '@Url.Action("Hotels", "Hotel")' + '?hotelID=' + hotelID;
+        }
+    </script>
+}

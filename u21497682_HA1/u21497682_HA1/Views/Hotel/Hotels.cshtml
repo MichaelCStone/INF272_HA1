@@ -1,0 +1,405 @@
+﻿@model u21497682_HA1.Models.HotelDataRepository
+
+@{
+    ViewBag.Title = "Book Hotel";
+    var hotelID = Request.QueryString["hotelID"];
+    var allHotels = Model.GetAllHotels();
+}
+
+<style>
+    /* Styles specific to the content of this page */
+    .book-hotel-page {
+        /* Your styling here */
+    }
+
+        /* Container for form */
+        .book-hotel-page .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Headings */
+        .book-hotel-page h1,
+        .book-hotel-page h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        /* Form elements */
+        .book-hotel-page .form-group,
+        .book-hotel-page .input-group {
+            margin-bottom: 20px;
+        }
+
+        .book-hotel-page label {
+            font-weight: bold;
+        }
+
+        .book-hotel-page input[type="text"],
+        .book-hotel-page input[type="email"],
+        .book-hotel-page input[type="tel"],
+        .book-hotel-page input[type="date"],
+        .book-hotel-page select,
+        .book-hotel-page textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box; /* Ensure padding doesn't affect width */
+        }
+
+        .book-hotel-page select {
+            appearance: none; /* Remove default select arrow */
+            padding-right: 30px; /* Reserve space for custom select arrow */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="6" viewBox="0 0 12 6"><path fill="%23373e42" d="M6 0L0 6h12z"/></svg>'); /* Add custom select arrow */
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px 6px;
+        }
+
+        .book-hotel-page textarea {
+            resize: vertical; /* Allow vertical resizing */
+        }
+
+        .book-hotel-page button {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .book-hotel-page button:hover {
+                background-color: #0056b3;
+            }
+</style>
+
+
+
+@if (hotelID != null)
+{
+    var hotel = Model.GetHotelById(int.Parse(hotelID));
+
+    <div class="book-hotel-page">
+
+        <h1>Booking For @hotel.Name</h1>
+
+        <div class="container">
+            @using (Html.BeginForm())
+            {
+                <div class="form-group">
+                    <label for="firstname">First Name:</label><br />
+                    <input type="text" id="firstName" placeholder="enter your first name" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="surname">Surname:</label><br />
+                    <input type="text" id="surname" placeholder="enter your surname" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="initials">Initials:</label><br />
+                    <input type="text" id="initials" placeholder="enter your initials" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="email">First Name:</label><br />
+                    <input type="email" id="email" placeholder="enter your email" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="IdType">ID Type:</label><br />
+                    <select id="IdType" required>
+                        <option value="SAID">South African ID</option>
+                        <option value="passport">Passport</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="idNumber">ID Number:</label><br />
+                    <input type="text" id="idNumber" placeholder="enter your id number" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="dateOfBirth">Date of Birth:</label><br />
+                    <input type="date" id="dateOfBirth" placeholder="enter your date of birth" required />
+                </div>
+
+                <div class="input-group">
+                    <label for="address">Address:</label><br />
+                    <input type="text" id="address" name="address" placeholder="enter your address" required />
+                </div>
+
+                <div class="input-group">
+                    <label for="telephone">Telephone:</label><br />
+                    <input type="tel" id="telephone" name="telephone" placeholder="enter your telephone" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="mealOptions">Meal Options:</label><br />
+                    <select id="mealOptions" class="form-control" required>
+                        <option value="default">-</option>
+                        @foreach (var mealOption in hotel.MealOptions)
+                        {
+                            <option value="@mealOption.Name">@mealOption.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="roomTypes">Room Types:</label><br />
+                    <select id="roomTypes" class="form-control" onchange="updateRoomDetails()" required>
+                        <option value="default">-</option>
+                        @foreach (var roomType in hotel.RoomTypes)
+                        {
+                            @*<option value="@roomType.Name">@roomType.Name - @roomType.Price.ToString("C")</option>*@
+                            <option value="@roomType.Name" data-price="@roomType.Price" data-features="@roomType.Features">
+                                @roomType.Name
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="roomPrice">Price (ZAR):</label><br />
+                    <input type="text" id="roomPrice" class="form-control" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label for="roomFeatures">Features:</label><br />
+                    <textarea id="roomFeatures" class="form-control" readonly></textarea>
+                </div>
+            }
+
+            <button class="btn-dark" id="confirmBookingBtn" onclick="confirmBooking()">Confirm Booking</button>
+        </div>
+    </div>
+}
+else
+{
+
+
+    <div>
+        <label for="HotelSelection">Select a Hotel</label><br />
+        <select id="HotelSelection" required onchange="showForm()">
+            <option value="default">-</option>
+            @foreach (var hotel in Model.GetAllHotels())
+            {
+                <option value="@hotel.HotelId">@hotel.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="book-hotel-page">
+
+        <h1 id="hotelTitle" class="d-none"></h1>
+
+        <div id="hotelContainer" class="d-none">
+            @using (Html.BeginForm())
+            {
+                <div class="input-group">
+                    <label for="firstname">First Name:</label><br />
+                    <input type="text" id="firstName" name="firstName" placeholder="enter your first name" required />
+                </div>
+
+                <div class="input-group">
+                    <label for="surname">Surname:</label><br />
+                    <input type="text" id="surname" name="surname" placeholder="enter your surname" required />
+                </div>
+
+                <div class="input-group">
+                    <label for="initials">Initials:</label><br />
+                    <input type="text" id="initials" name="initials" placeholder="enter your initials" required />
+                </div>
+
+                <div class="input-group">
+                    <label for="email">Email:</label><br />
+                    <input type="email" id="email" name="email" placeholder="enter your email" required />
+                </div>
+
+                <div class="input-group">
+                    <label for="IdType">ID Type:</label><br />
+                    <select id="IdType" name="IdType" required>
+                        <option value="SAID">South African ID</option>
+                        <option value="passport">Passport</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="idNumber">ID Number:</label><br />
+                    <input type="text" id="idNumber" placeholder="enter your id number" required />
+                </div>
+
+                <div class="input-group">
+                    <label for="dateOfBirth">Date of Birth:</label><br />
+                    <input type="date" id="dateOfBirth" name="dateOfBirth" placeholder="enter your date of birth" required />
+                </div>
+
+                <div class="input-group">
+                    <label for="address">Address:</label><br />
+                    <input type="text" id="address" name="address" placeholder="enter your address" required />
+                </div>
+
+                <div class="input-group">
+                    <label for="telephone">Telephone:</label><br />
+                    <input type="tel" id="telephone" name="telephone" placeholder="enter your telephone" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="mealOptions">Meal Options:</label><br />
+                    <select id="mealOptions" name="mealOptions" class="form-control" required>
+                        <option value="default">-</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="roomTypes">Room Types:</label><br />
+                    <select id="roomTypes" name="roomTypes" class="form-control" onchange="updateRoomDetails()" required>
+                        <option value="default">-</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="roomPrice">Price (ZAR):</label><br />
+                    <input type="number" id="roomPrice" name="roomPrice" readonly />
+                </div>
+
+                <div class="input-group">
+                    <label for="roomFeatures">Features:</label><br />
+                    <textarea id="roomFeatures" name="roomFeatures"></textarea>
+                </div>
+            }
+
+            <button class="btn-dark" id="confirmBookingBtn" onclick="confirmBooking()">Confirm Booking</button>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    <script>
+            var selectedHotelIdGlobal = null;
+            var hotelData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(allHotels));
+
+            function updateRoomDetails()
+            {
+                var selectedRoom = document.getElementById("roomTypes").selectedOptions[0];
+                var price = selectedRoom.getAttribute("data-price");
+                //console.log(price);
+                var features = selectedRoom.getAttribute("data-features");
+
+                document.getElementById("roomPrice").value = price ? parseFloat(price).toFixed(2) : "";
+                document.getElementById("roomFeatures").value = features ? features : "";
+            }
+
+            function showForm()
+            {
+                var selectedHotelId = document.getElementById("HotelSelection").value;
+
+                if (selectedHotelId !== "default")
+                {
+                    document.getElementById("hotelContainer").classList.remove("d-none");
+                    selectedHotelIdGlobal = selectedHotelId;
+
+                    var selectedHotel = hotelData.find(hotel => hotel.HotelId == selectedHotelId);
+
+                    document.getElementById("hotelTitle").classList.remove("d-none");
+                    document.getElementById("hotelTitle").innerHTML = "Booking for " + selectedHotel.Name;
+
+                    var mealOptions = document.getElementById("mealOptions");
+                    mealOptions.innerHTML = '<option value="default">-</option>';
+
+                    selectedHotel.MealOptions.forEach(option => {
+                        var opt = document.createElement('option');
+                        opt.value = option.Name;
+                        opt.innerHTML = option.Name;
+                        mealOptions.appendChild(opt);
+                    });
+
+                    var roomTypes = document.getElementById("roomTypes");
+                    roomTypes.innerHTML = '<option value="default">-</option>';
+
+                    selectedHotel.RoomTypes.forEach(type => {
+                        //console.log(type.Price);
+                        var opt = document.createElement('option');
+                        opt.value = type.Name;
+                        opt.innerHTML = type.Name;
+                        opt.setAttribute('data-price', type.Price);
+                        opt.setAttribute('data-features', type.Features);
+                        roomTypes.appendChild(opt);
+                    });
+                }
+                else
+                {
+                    document.getElementById("hotelContainer").classList.add("d-none");
+                    selectedHotelIdGlobal = null; // Reset the global variable
+                }
+            }
+
+            function confirmBooking()
+            {
+                //var hotelId = selectedHotelIdGlobal;
+                var firstName = document.getElementById("firstName").value;
+                var surname = document.getElementById("surname").value;
+                var initials = document.getElementById("initials").value;
+                var email = document.getElementById("email").value;
+                var idType = document.getElementById("IdType").value;
+                var dateOfBirth = document.getElementById("dateOfBirth").value;
+                var address = document.getElementById("address").value;
+                var telephone = document.getElementById("telephone").value;
+                var mealOption = document.getElementById("mealOptions").value;
+                var roomType = document.getElementById("roomTypes").value;
+                var price = document.getElementById("roomPrice").value;
+                var features = document.getElementById("roomFeatures").value;
+
+                var bookingId = generateUUID();
+                //console.log(bookingId);
+                var bookingDateTime = new Date().toISOString();
+
+
+
+                var bookingDetails = {
+                    //hotelId: hotelId,
+                    bookingId: bookingId,
+                    bookingDateTime: bookingDateTime,
+                    firstName: firstName,
+                    surname: surname,
+                    initials: initials,
+                    email: email,
+                    idType: idType,
+                    dateOfBirth: dateOfBirth,
+                    address: address,
+                    telephone: telephone,
+                    mealOption: mealOption,
+                    roomType: roomType,
+                    price: price,
+                    features: features
+                };
+
+                // Save booking details to localStorage
+                localStorage.setItem("bookingDetails", JSON.stringify(bookingDetails));
+
+                window.location.href = '@Url.Action("BookingConfirmed", "Hotel")';
+            }
+
+            function generateUUID()
+            {
+                var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                    var r = Math.random() * 16 | 0,
+                        v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+                return uuid;
+            }
+
+
+    </script>
+}

@@ -1,0 +1,196 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+}
+
+<style>
+    h2, h3 {
+        color: #007bff;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        margin: 10px;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        background-color: #f8f9fa;
+    }
+
+        .card h6 {
+            color: #6c757d;
+        }
+
+        .card h4 {
+            color: #343a40;
+            margin-top: 10px;
+        }
+
+    .table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+
+        .table th, .table td {
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            color: #495057;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .table img.img-thumbnail {
+            max-width: 50px; /* Set maximum width for logos */
+            height: auto;
+        }
+
+    button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+<div class="container">
+    <h2 class="text-center">Dashboard</h2>
+
+    <div class="row">
+        <div class="col-md-2 card">
+            <h6>Total Bookings</h6>
+            <h4>32</h4>
+        </div>
+
+        <div class="col-md-2 card">
+            <h6>Total Income</h6>
+            <h4>R22,500.00</h4>
+        </div>
+
+        <div class="col-md-2 card">
+            <h6>Total Guests</h6>
+            <h4>50</h4>
+        </div>
+
+        <div class="col-md-2 card">
+            <h6>June 2024</h6>
+            <p>Current Date: 03-06-2024</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <h2>Sales Performance</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Hotel</th>
+                    <th>Number of Bookings</th>
+                    <th>Total Sales (R)</th>
+                    <th>Logo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>CapeHoney</td>
+                    <td>12</td>
+                    <td>35000</td>
+                    <td><img src="@Url.Content("~/Images_&_Videos/CapeHoneyLogo.png")" class="img-thumbnail" alt="CapeHoney" /></td>
+                </tr>
+                <tr>
+                    <td>CapeIvory</td>
+                    <td>8</td>
+                    <td>23000</td>
+                    <td><img src="@Url.Content("~/Images_&_Videos/CapeIvoryLogo.png")" class="img-thumbnail" alt="CapeIvory" /></td>
+                </tr>
+                <tr>
+                    <td>CapeSweet</td>
+                    <td>4</td>
+                    <td>20000</td>
+                    <td><img src="@Url.Content("~/Images_&_Videos/CapeSweetLogo.png")" class="img-thumbnail" alt="CapeSweet" /></td>
+                </tr>
+                <tr>
+                    <td>CapeHive</td>
+                    <td>6</td>
+                    <td>15000</td>
+                    <td><img src="@Url.Content("~/Images_&_Videos/CapeHiveLogo.png")" class="img-thumbnail" alt="CapeHive" /></td>
+                </tr>
+                <tr>
+                    <td>CapeCow</td>
+                    <td>5</td>
+                    <td>25000</td>
+                    <td><img src="@Url.Content("~/Images_&_Videos/CapeCowLogo.png")" class="img-thumbnail" alt="CapeCow" /></td>
+                </tr>
+            </tbody>
+        </table>
+        <button>Export Table</button>
+    </div>
+
+    <div class="row">
+        <h3>Customers</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Booking Date</th>
+                    <th>Phone Number</th>
+                    <th>Hotel</th>
+                    <th>Room Type</th>
+                    <th>Number of Guests in Room</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Jerry Mattedi</td>
+                    <td>19 April, 2024 : 10:10 AM</td>
+                    <td>1234567890</td>
+                    <td>CapeCow</td>
+                    <td>Deluxe</td>
+                    <td>2</td>
+                    <td>R5,000</td>
+                </tr>
+                <tr>
+                    <td>Elianora Vasilov</td>
+                    <td>18 April, 2024 : 3:12 PM</td>
+                    <td>2345678901</td>
+                    <td>CapeSweet</td>
+                    <td>Executive</td>
+                    <td>1</td>
+                    <td>R20,000</td>
+                </tr>
+                <tr>
+                    <td>Alvis Daen</td>
+                    <td>19 April, 2024 : 2:15 AM</td>
+                    <td>3456789012</td>
+                    <td>CapeHoney</td>
+                    <td>Regular</td>
+                    <td>2</td>
+                    <td>R6,000</td>
+                </tr>
+                <tr>
+                    <td>Lissa Nkosimo</td>
+                    <td>17 April, 2024 : 01:10 AM</td>
+                    <td>4567890123</td>
+                    <td>CapeIvory</td>
+                    <td>Standard</td>
+                    <td>1</td>
+                    <td>R8,000</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
